@@ -11,3 +11,5 @@ python-dotenv==1.0.0
 SQLAlchemy==1.4.7
 Werkzeug==2.2.3
 WTForms==3.0.1
+Flask-login 0.6.3
+Flask-Migrate 4.0.5
