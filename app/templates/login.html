@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <div class="container mt-3">
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endwith %}
+
+<style>
+    .form-control {
+        width: 300px;
+    }
+
+    .center-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+    }
+
+    .registration-form {
+        max-width: 400px;
+        width: 100%;
+    }
+</style>
+
+<div class="center-container">
+    <div class="registration-form">
+        <h1>Вход в аккаунт</h1>
+        <form method="post">
+            {{ form.hidden_tag() }}
+
+            <div class="mb-3">
+                <label>
+                    {{ form.username.label }}
+                </label>
+                {{ form.username(class="form-control") }}
+            </div>
+            {% for error in form.username.errors %}
+            <div class="alert alert-danger" role="alert">
+                <span>{{ error }}</span>
+            </div>
+            {% endfor %}
+
+            <div class="mb-3">
+                <label>
+                    {{ form.password.label }}
+                </label>
+                {{ form.password(class="form-control") }}
+            </div>
+            {% for error in form.password.errors %}
+            <div class="alert alert-danger" role="alert">
+                <span>{{ error }}</span>
+            </div>
+            {% endfor %}
+
+            <div>
+                {{ form.submit(class="btn btn-lg btn-outline-secondary") }}
+            </div>
+        </form>
+        <p>Ещё нет аккаунта? <a href="{{ url_for('register') }}">Зарегистрироваться</a></p>
+    </div>
+</div>
+{% endblock %}

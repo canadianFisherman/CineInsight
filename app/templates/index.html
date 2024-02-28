@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="mb-3">
+    <label for="searchBar" class="form-label">Поиск фильмов:</label>
+    <input type="text" class="form-control smaller-search" id="searchBar" placeholder="Введите название фильма">
+  </div>
+
+  <div class="row">
+    {% for movie in movies %}
+      <div class="col-md-4">
+        <div class="card mb-4">
+          {% if movie.image %}
+            <img src="{{ url_for('static', filename='images/' + movie.image) }}" class="card-img-top">
+          {% endif %}
+          <div class="card-body">
+            <h1 class="card-title display-6">{{ movie.title }}</h1>
+            <p class="card-text">{{ movie.description|truncate(200) }}</p>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="btn-group">
+                <a href="{{ url_for('movie', id=movie.id) }}" class="btn btn-lg btn-outline-secondary">К отзывам</a>
+              </div>
+              <small class="text-muted">
+                {% if movie.reviews %}
+                  Отзывов: {{ movie.reviews|length }}
+                {% else %}
+                  Отзывов еще нет
+                {% endif %}
+              </small>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% else %}
+      <p class="lead">Пока тут пусто, но скоро мы это исправим!</p>
+    {% endfor %}
+  </div>
+
+  <style>
+    /* Add styles for the smaller search bar */
+    .smaller-search {
+      width: 70%; /* Adjust the width to your preference */
+      max-width: 220px; /* Set a maximum width if needed */
+    }
+  </style>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const searchBar = document.getElementById('searchBar');
+      searchBar.addEventListener('input', function() {
+        const searchQuery = this.value.toLowerCase();
+
+        // Hide or show movies based on the search query
+        document.querySelectorAll('.card').forEach(function(card) {
+          const movieTitle = card.querySelector('.card-title').textContent.toLowerCase();
+          const isVisible = movieTitle.includes(searchQuery);
+          card.style.display = isVisible ? 'block' : 'none';
+        });
+      });
+    });
+  </script>
+{% endblock content %}

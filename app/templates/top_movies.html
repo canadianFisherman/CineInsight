@@ -1,0 +1,76 @@
+<!-- all_titles.html -->
+
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    .smaller-search {
+      width: 80%;
+      max-width: 395px;
+    }
+
+    .form-select {
+    width: 30%;
+    max-width: 220 px;
+    }
+
+    #notFoundMessage {
+      text-align: center;
+      margin-top: 10px;
+      color: #777;
+    }
+</style>
+
+<h2 class="mt-4" xmlns="http://www.w3.org/1999/html">Лучшие фильмы по оценкам пользователей</h2>
+
+  <form method="get" action="{{ url_for('top_movies') }}" class="mb-3">
+    <label for="genre_filter">Выберите жанр:</label>
+    <select name="genre_filter" id="genre_filter" class="form-select">
+      {% for k, v in genres.items() %}
+      <option value="{{ k }}" selected>{{ v }}</option>
+      {% endfor %}
+    </select>
+    <button type="submit" class="btn btn-primary">Фильтр</button>
+  </form>
+
+  <!-- Search bar -->
+  <div class="mb-3">
+    <label for="searchBar" class="form-label">Поиск фильмов:</label>
+    <input type="text" class="form-control smaller-search" id="searchBar" placeholder="Введите название фильма">
+  </div>
+
+  <ul class="list-group mt-3" id="movieList">
+    {% for k, v in movie_list.items() %}
+      <li class="list-group-item">
+        <strong>{{ loop.index0 + 1}}. <a href="{{ url_for('movie', id=v[0]) }}">
+        {{ k }}</a></strong> ⭐ {{ v[1] }}
+      </li>
+    {% endfor %}
+    {% if movie_list|length == 0 %}
+      <p class="lead" id="notFoundMessage">По вашему запросу ничего не найдено.</p>
+    {% endif %}
+  </ul>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const searchBar = document.getElementById('searchBar');
+      searchBar.addEventListener('input', function() {
+        const searchQuery = this.value.toLowerCase();
+        const movieList = document.getElementById('movieList');
+        const notFoundMessage = document.getElementById('notFoundMessage');
+        let foundMovies = false;
+
+
+        document.querySelectorAll('.list-group-item').forEach(function(item) {
+          const movieTitle = item.querySelector('a').textContent.toLowerCase();
+          const isVisible = movieTitle.includes(searchQuery);
+          item.style.display = isVisible ? 'block' : 'none';
+          foundMovies = foundMovies || isVisible;
+        });
+
+
+        notFoundMessage.style.display = foundMovies ? 'none' : 'block';
+      });
+    });
+  </script>
+{% endblock %}

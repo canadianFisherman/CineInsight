@@ -1,0 +1,11 @@
+<!-- templates/access_denied.html -->
+
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="mt-5 text-center">
+    <h2>Доступ запрещён 😢</h2>
+    <p>У Вас нет прав на посещение этой страницы.</p>
+    <a href="{{ url_for('index') }}" class="btn btn-primary">Вернуться на главнаую</a>
+  </div>
+{% endblock %}
